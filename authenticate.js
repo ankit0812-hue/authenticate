@@ -6,7 +6,7 @@ exports.local = passport.use(new LocalStrategy((username,password,done) =>{
     User.findOne({username: username})
     .then((user) =>{
         if(user){
-            brcypt.compare(password,hash)
+            brcypt.compare(password,user.password)
             .then((result) =>{
                 if(result)
                 {
