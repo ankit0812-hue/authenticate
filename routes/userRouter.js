@@ -18,18 +18,22 @@ userRouter.post('/register',(req,res,next) =>{
         }
         else{
             const hashedPassword = bcrypt.hash(req.body.password,10);
-            User.create({
-                name: req.body.name,
+            var user = new User({
+                username: req.body.username,
                 password: hashedPassword,
                 email: req.body.email,
                 number: req.body.number
             });
-            res.statusCode = 200;
-            res.setHeader('Content-Type','application/json');
-            res.json({status:'You are successfully signed up'});
 
+            user.save()
+            .then((user) =>{
+                res.statusCode = 200;
+                res.setHeader('Content-Type','application/json');
+                res.json({status: 'Registration successful'});
+            },(err) => next(err))
         }
-    })
+        
+    },(err) =>next(err))
     .catch((err) => next(err));
 });
 
