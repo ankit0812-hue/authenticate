@@ -6,12 +6,14 @@ exports.local = passport.use(new LocalStrategy((username,password,done) =>{
     User.findOne({username: username})
     .then((user) =>{
         if(user){
-            brcypt.compare(password,user.password)
-            .then((result) =>{
-                if(result)
-                {
-                    return done(null,user);
-                }
+              bcrypt.compare(password,user.password,(err,result) =>{
+               if(err){
+                     return done(err,false);
+                 }
+                 return done(null,user);
+             });
+            
+         }
                 else{
                     var err = new Error('Incorrect Password');
                     return done(err,false);
